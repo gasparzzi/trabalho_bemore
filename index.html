@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeMore</title>
+    <title>BeMore - Aprenda TI</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -15,8 +15,8 @@
 
     <div id="loginScreen" class="screen active">
         <div class="logo-container">
-            <img src="img/logo_bemore.png" class="app-logo" onerror="this.style.display='none'; document.getElementById('txtLogo').style.display='block'">
-            <h1 id="txtLogo" style="display:none; color:var(--primary-color); font-size:2rem; text-align:center;">BeMORE</h1>
+            <img src="img/logo_bemore.png" class="app-logo" onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block'">
+            <h1 id="fallbackLogo" style="display:none; color:var(--primary-color); text-align:center;">BeMORE</h1>
         </div>
         <div class="card-box">
             <h3 class="card-title">Bem-vindo</h3>
@@ -31,15 +31,15 @@
             <button class="btn-primary" onclick="app.login()">Entrar</button>
             <p class="toggle-text">Não tem conta? <span onclick="app.toggleAuth('cadastro')">Cadastre-se</span></p>
         </div>
-        <img src="img/mascote_ola.png" class="mascote-intro" style="width:120px; display:block; margin:20px auto;" onerror="this.style.display='none'">
+        <img src="img/mascote_ola.png" class="mascote-intro" onerror="this.style.display='none'">
     </div>
 
     <div id="cadastroScreen" class="screen">
-        <div class="logo-container"><h1 style="color:var(--primary-color);">CADASTRO</h1></div>
+        <div class="logo-container"><h1 style="color:var(--primary-color);">CRIAR CONTA</h1></div>
         <div class="card-box">
-            <div class="input-group"><label>Nome</label><input type="text" id="regNome"></div>
-            <div class="input-group"><label>Email</label><input type="email" id="regEmail"></div>
-            <div class="input-group"><label>Senha</label><input type="password" id="regPass"></div>
+            <div class="input-group"><label>Nome</label><input type="text" id="regNome" placeholder="Seu nome"></div>
+            <div class="input-group"><label>Email</label><input type="email" id="regEmail" placeholder="seu@email.com"></div>
+            <div class="input-group"><label>Senha</label><input type="password" id="regPass" placeholder="********"></div>
             <button class="btn-primary" onclick="app.registrar()">Cadastrar</button>
             <p class="toggle-text">Já tem conta? <span onclick="app.toggleAuth('login')">Voltar</span></p>
         </div>
@@ -50,42 +50,27 @@
             <h2>Trilhas</h2>
             <div class="xp-badge">🔥 <span id="userXP">0</span></div>
         </div>
-        <div id="trilhasContainer" style="padding-bottom:50px;"></div>
+        <div id="trilhasContainer"></div>
     </div>
 
     <div id="configScreen" class="screen">
-        <div class="header-top">
-            <h2>Configurações</h2>
-        </div>
-        
+        <div class="header-top"><h2>Configurações</h2></div>
         <div class="config-list">
             <div class="config-section-title">Editar Perfil</div>
-            
-            <div class="card-box" style="margin-bottom:0;">
-                <div class="input-group">
-                    <label>Novo Nome</label>
-                    <input type="text" id="editNome" placeholder="Nome atual">
-                </div>
-                <div class="input-group">
-                    <label>Novo Email</label>
-                    <input type="email" id="editEmail" placeholder="Email atual">
-                </div>
-                <div class="input-group">
-                    <label>Nova Senha</label>
-                    <input type="password" id="editSenha" placeholder="Nova senha (opcional)">
-                </div>
-                <button class="btn-primary" onclick="app.atualizarPerfil()">Salvar Alterações</button>
+            <div class="card-box" style="margin-bottom:10px;">
+                <div class="input-group"><label>Nome</label><input type="text" id="editNome"></div>
+                <div class="input-group"><label>Email</label><input type="email" id="editEmail"></div>
+                <div class="input-group"><label>Nova Senha</label><input type="password" id="editSenha" placeholder="(Opcional)"></div>
+                <button class="btn-primary" onclick="app.atualizarPerfil()">Salvar</button>
             </div>
-
             <div class="config-section-title">Preferências</div>
             <div class="config-item">
                 <div class="config-label"><i class="fas fa-moon"></i> Tema Escuro</div>
                 <label class="switch">
-                    <input type="checkbox" id="themeSwitch" onchange="app.toggleTheme()">
+                    <input type="checkbox" id="themeSwitch" onchange="app.toggleTheme()" checked>
                     <span class="slider round"></span>
                 </label>
             </div>
-            
             <button class="btn-secondary" onclick="app.logout()">Sair da Conta</button>
         </div>
     </div>
@@ -94,7 +79,7 @@
         <div class="header-top"><h2>Ranking</h2></div>
         <div style="text-align:center; padding:50px; color:var(--text-muted);">
             <i class="fas fa-trophy" style="font-size:3rem; margin-bottom:20px;"></i>
-            <p>Ranking Semanal em breve!</p>
+            <p>Em breve!</p>
         </div>
     </div>
 
@@ -105,19 +90,22 @@
             <span class="hearts-display"><i class="fas fa-heart"></i> <span id="displayVidas">15</span></span>
         </div>
         
-        <h4 id="aulaTituloDisplay" style="text-align:center; color:var(--text-muted); margin:10px 0;">Titulo</h4>
-        
-        <div style="text-align:center; margin-bottom:10px;" id="mascoteAulaContainer">
-            <img src="img/mascote_ola.png" style="width:80px;" onerror="this.style.display='none'">
+        <h4 id="aulaTituloDisplay" style="text-align:center; color:var(--text-muted); margin:5px 0 15px 0;">Titulo</h4>
+
+        <p id="perguntaTexto" class="question-text">...</p>
+
+        <div style="text-align:center; margin-bottom:15px;">
+            <button id="btnDica" class="btn-hint" onclick="app.mostrarDica()">
+                <i class="fas fa-lightbulb"></i> Preciso de uma dica
+            </button>
         </div>
 
-        <p id="perguntaTexto" class="question-text">Carregando...</p>
-        
-        <div id="imgPerguntaContainer" style="text-align:center; display:none; margin-bottom:20px;">
-            <img id="imgPergunta" src="" style="max-width:100%; border-radius:10px;" onerror="this.style.display='none'">
+        <div id="teachingArea" class="teaching-card" style="display:none;">
+            <div class="teaching-title"><i class="fas fa-graduation-cap"></i> Dica:</div>
+            <div id="teachingText" class="teaching-text">...</div>
         </div>
-
-        <div id="opcoesContainer"></div>
+        
+        <div id="opcoesContainer" class="options-container"></div>
     </div>
 
     <div id="bottomNav" class="bottom-nav">
