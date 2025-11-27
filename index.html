@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BeMore - Aprenda TI</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,19 +15,13 @@
 
     <div id="loginScreen" class="screen active">
         <div class="logo-container">
-            <img src="img/logo_bemore.png" class="app-logo" onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block'">
-            <h1 id="fallbackLogo" style="display:none; color:var(--primary-color); text-align:center;">BeMORE</h1>
+            <img src="img/logo_bemore.png" class="app-logo" onerror="this.style.display='none'; document.getElementById('fbL').style.display='block'">
+            <h1 id="fbL" style="display:none; color:var(--primary-color); text-align:center;">BeMORE</h1>
         </div>
         <div class="card-box">
             <h3 class="card-title">Bem-vindo</h3>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="loginEmail" placeholder="seu@email.com">
-            </div>
-            <div class="input-group">
-                <label>Senha</label>
-                <input type="password" id="loginPass" placeholder="********">
-            </div>
+            <div class="input-group"><label>Email</label><input type="email" id="loginEmail" placeholder="seu@email.com"></div>
+            <div class="input-group"><label>Senha</label><input type="password" id="loginPass" placeholder="********"></div>
             <button class="btn-primary" onclick="app.login()">Entrar</button>
             <p class="toggle-text">Não tem conta? <span onclick="app.toggleAuth('cadastro')">Cadastre-se</span></p>
         </div>
@@ -37,9 +31,9 @@
     <div id="cadastroScreen" class="screen">
         <div class="logo-container"><h1 style="color:var(--primary-color);">CRIAR CONTA</h1></div>
         <div class="card-box">
-            <div class="input-group"><label>Nome</label><input type="text" id="regNome" placeholder="Seu nome"></div>
-            <div class="input-group"><label>Email</label><input type="email" id="regEmail" placeholder="seu@email.com"></div>
-            <div class="input-group"><label>Senha</label><input type="password" id="regPass" placeholder="********"></div>
+            <div class="input-group"><label>Nome</label><input type="text" id="regNome"></div>
+            <div class="input-group"><label>Email</label><input type="email" id="regEmail"></div>
+            <div class="input-group"><label>Senha</label><input type="password" id="regPass"></div>
             <button class="btn-primary" onclick="app.registrar()">Cadastrar</button>
             <p class="toggle-text">Já tem conta? <span onclick="app.toggleAuth('login')">Voltar</span></p>
         </div>
@@ -56,22 +50,19 @@
     <div id="configScreen" class="screen">
         <div class="header-top"><h2>Configurações</h2></div>
         <div class="config-list">
-            <div class="config-section-title">Editar Perfil</div>
+            <div class="config-section-title">Perfil</div>
             <div class="card-box" style="margin-bottom:10px;">
                 <div class="input-group"><label>Nome</label><input type="text" id="editNome"></div>
                 <div class="input-group"><label>Email</label><input type="email" id="editEmail"></div>
-                <div class="input-group"><label>Nova Senha</label><input type="password" id="editSenha" placeholder="(Opcional)"></div>
+                <div class="input-group"><label>Senha</label><input type="password" id="editSenha" placeholder="(Opcional)"></div>
                 <button class="btn-primary" onclick="app.atualizarPerfil()">Salvar</button>
             </div>
             <div class="config-section-title">Preferências</div>
             <div class="config-item">
                 <div class="config-label"><i class="fas fa-moon"></i> Tema Escuro</div>
-                <label class="switch">
-                    <input type="checkbox" id="themeSwitch" onchange="app.toggleTheme()" checked>
-                    <span class="slider round"></span>
-                </label>
+                <label class="switch"><input type="checkbox" id="themeSwitch" onchange="app.toggleTheme()" checked><span class="slider round"></span></label>
             </div>
-            <button class="btn-secondary" onclick="app.logout()">Sair da Conta</button>
+            <button class="btn-secondary" onclick="app.logout()">Sair</button>
         </div>
     </div>
 
@@ -92,9 +83,7 @@
         
         <h4 id="aulaTituloDisplay" style="text-align:center; color:var(--text-muted); margin:5px 0 15px 0;">Titulo</h4>
 
-        <p id="perguntaTexto" class="question-text">...</p>
-
-        <div style="text-align:center; margin-bottom:15px;">
+        <div style="text-align:center; margin-bottom:20px;">
             <button id="btnDica" class="btn-hint" onclick="app.mostrarDica()">
                 <i class="fas fa-lightbulb"></i> Preciso de uma dica
             </button>
@@ -104,7 +93,8 @@
             <div class="teaching-title"><i class="fas fa-graduation-cap"></i> Dica:</div>
             <div id="teachingText" class="teaching-text">...</div>
         </div>
-        
+
+        <p id="perguntaTexto" class="question-text">...</p>
         <div id="opcoesContainer" class="options-container"></div>
     </div>
 
