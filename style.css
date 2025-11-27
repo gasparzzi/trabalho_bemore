@@ -141,9 +141,8 @@ body {
 input:checked + .slider { background-color: var(--success); }
 input:checked + .slider:before { transform: translateX(24px); }
 
-/* --- CORREÇÃO BARRA MOBILE (Oculta por padrão) --- */
 .bottom-nav {
-    display: none !important; /* SEGURANÇA MÁXIMA */
+    display: none !important; 
     position: fixed;
     bottom: 0; left: 0; width: 100%; height: 70px;
     background: var(--nav-bg);
@@ -153,9 +152,8 @@ input:checked + .slider:before { transform: translateX(24px); }
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* CLASSE QUE O JS VAI ADICIONAR PARA MOSTRAR */
 .bottom-nav.visible {
-    display: grid !important; /* FORÇA GRID QUANDO ATIVO */
+    display: grid !important; 
     grid-template-columns: 1fr 1fr 1fr;
 }
 

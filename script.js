@@ -1,8 +1,6 @@
-/* === CONFIGURAÇÃO SUPABASE === */
 const SUPABASE_URL = 'https://lslhcoytqzeazhjdbwnp.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzbGhjb3l0cXplYXpoamRid25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNjE4NzEsImV4cCI6MjA3OTczNzg3MX0.p9gJeTQjdafLx1gq_eAMFiT8aHJmkcnubrkqJEXsVEg'; 
 
-/* === INICIALIZAÇÃO === */
 let supabaseClient = null;
 try {
     if (typeof supabase !== 'undefined') {
@@ -15,10 +13,9 @@ function safeSetText(id, text) {
     if (el) el.innerText = text;
 }
 
-/* === BANCO DE DADOS DIDÁTICO (CENÁRIOS REAIS) === */
 const DBService = {
     getPerguntas: function(aulaId) {
-        // AULA 101: INTRODUÇÃO E CONCEITOS
+        
         if (aulaId === 101) return [
             { 
                 dica: "Pense na sua mesa de estudos real. É o primeiro lugar que você vê, onde deixa as ferramentas que está usando agora.",
@@ -97,7 +94,7 @@ const DBService = {
             }
         ];
 
-        // AULA 102: ÁREA DE TRABALHO E JANELAS
+        
         if (aulaId === 102) return [
             { 
                 dica: "Atalhos são identificados por uma pequena setinha no canto do ícone. Eles são apenas caminhos, não o arquivo real.",
@@ -198,7 +195,7 @@ const DBService = {
         ];
     },
 
-    /* === INTEGRAÇÃO BD === */
+    
     getProgresso: async function(userId) {
         if (!supabaseClient) return [];
         try {
@@ -224,7 +221,6 @@ const DBService = {
     }
 };
 
-/* === CONTROLE APP === */
 const app = {
     user: null, vidas: 15, progressoLocal: [],
     
@@ -265,7 +261,7 @@ const app = {
         if(!email || !senha) return alert("Preencha tudo.");
         if(btn) btn.innerText = "Entrando...";
 
-        if(!supabaseClient) { // Modo offline automático se a lib falhar
+        if(!supabaseClient) { 
             this.user = { id: 999, nome: "Visitante", email: email };
             this.loadHome();
             if(btn) btn.innerText = "Entrar";
