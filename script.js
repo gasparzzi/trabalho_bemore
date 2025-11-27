@@ -18,7 +18,7 @@ const DBService = {
         if (aulaId === 101) return [
             { dica: "A tela principal do Windows chama-se 'Área de Trabalho'.", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
             { dica: "A Barra de Tarefas fica embaixo e mostra programas.", p: "Onde fica a Barra de Tarefas?", ops: ["Topo", "Parte Inferior", "Meio", "Não existe"], c: 1 },
-            { dica: "Botão Iniciar abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
+            { dica: "Botão Iniciar (logo do Windows) abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
             { dica: "Pastas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
             { dica: "O 'X' fecha a janela.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
             { dica: "Ctrl + C copia.", p: "Atalho Copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
@@ -95,6 +95,7 @@ const app = {
     vidas: 15,
     progressoLocal: [],
     
+    // NAVEGAÇÃO SEGURA (Controle da barra)
     navegar: function(screenId) {
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const target = document.getElementById(screenId);
@@ -102,11 +103,14 @@ const app = {
         
         const nav = document.getElementById('bottomNav');
         if(nav) {
+            // Remove o display:none manual e adiciona a classe visible
             if(['homeScreen', 'rankingScreen', 'configScreen'].includes(screenId)) {
-                nav.classList.add('visible'); // USA CLASSE CSS
+                nav.style.display = ''; // Limpa o inline style
+                nav.classList.add('visible'); // Adiciona o grid
                 this.updateNavIcon(screenId);
             } else { 
-                nav.classList.remove('visible'); // REMOVE CLASSE
+                nav.classList.remove('visible'); // Remove o grid
+                nav.style.display = 'none'; // Força none
             }
         }
     },
@@ -120,7 +124,7 @@ const app = {
 
     toggleAuth: function(tela) {
         const nav = document.getElementById('bottomNav');
-        if(nav) nav.classList.remove('visible');
+        if(nav) { nav.classList.remove('visible'); nav.style.display = 'none'; }
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const t = document.getElementById(tela === 'login' ? 'loginScreen' : 'cadastroScreen');
         if(t) { t.style.display = 'flex'; setTimeout(() => t.classList.add('active'), 10); }
@@ -257,6 +261,7 @@ const app = {
                 path.appendChild(node);
             });
         });
+        
         this.navegar('homeScreen');
     },
 
@@ -354,7 +359,7 @@ const app = {
 
 window.onload = function() {
     const nav = document.getElementById('bottomNav');
-    if(nav) nav.classList.remove('visible');
+    if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
 
     if(localStorage.getItem('tema') === 'light') {
         document.body.classList.add('light-theme');

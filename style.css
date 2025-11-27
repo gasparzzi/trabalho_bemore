@@ -48,14 +48,13 @@ body {
     overflow: hidden;
 }
 
-/* SCROLL E TELAS */
 .screen {
     display: none;
     flex-direction: column;
     height: 100%;
     width: 100%;
     padding: 20px;
-    padding-bottom: 140px; /* Garante que o conteúdo não fique atrás da barra */
+    padding-bottom: 140px; 
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background-color: var(--bg-color);
@@ -65,7 +64,6 @@ body {
 .screen.active { display: flex !important; z-index: 20; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* LOGIN */
 .logo-container { display: flex; justify-content: center; margin: 40px 0 20px 0; }
 .app-logo { max-width: 150px; height: auto; }
 .mascote-intro { width: 120px; display: block; margin: 20px auto; }
@@ -76,18 +74,13 @@ body {
 }
 .card-title { color: var(--text-color); margin-bottom: 20px; font-size: 1.5rem; }
 .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; }
-.input-group input { 
-    width: 100%; padding: 15px; 
-    background: var(--input-bg); border: 1px solid var(--border-color); 
-    color: var(--text-color); border-radius: 12px; margin-bottom: 20px; outline: none; font-size: 1rem;
-}
+.input-group input { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; margin-bottom: 20px; outline: none; font-size: 1rem; }
 
 .btn-primary { width: 100%; padding: 16px; background: var(--secondary-color); border: none; color: white; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
 .btn-secondary { width: 100%; padding: 16px; background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 .toggle-text { text-align: center; margin-top: 20px; color: var(--text-muted); }
 .toggle-text span { color: var(--primary-color); font-weight: bold; cursor: pointer; }
 
-/* TRILHA */
 .header-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; background: var(--bg-color); position: sticky; top: 0; z-index: 30; }
 .xp-badge { background: var(--card-bg); padding: 8px 15px; border-radius: 20px; font-weight: bold; color: var(--gold); border: 1px solid var(--border-color); }
 
@@ -114,7 +107,6 @@ body {
 .star.active { color: var(--gold); }
 .node-label { position: absolute; bottom: -35px; width: 160px; text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); background: var(--bg-color); padding: 2px; }
 
-/* AULA */
 .top-bar { display: flex; align-items: center; margin-bottom: 20px; justify-content: space-between; }
 .close-btn { font-size: 2.5rem; cursor: pointer; color: var(--text-muted); padding: 10px; }
 .progress-bar-container { flex-grow: 1; height: 12px; background: var(--border-color); border-radius: 6px; margin: 0 15px; overflow: hidden; }
@@ -123,7 +115,6 @@ body {
 
 .question-text { font-size: 1.3rem; text-align: center; margin: 30px 0 50px 0; line-height: 1.5; color: var(--text-color); }
 
-/* DICA */
 .btn-hint {
     background: transparent; border: 2px dashed var(--text-muted); color: var(--text-muted);
     padding: 12px 20px; border-radius: 25px; font-size: 0.9rem; font-weight: bold;
@@ -137,14 +128,9 @@ body {
 .teaching-title { color: var(--gold); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
 .teaching-text { color: var(--text-color); font-size: 1.1rem; line-height: 1.5; }
 
-.option-btn { 
-    background: transparent; border: 2px solid var(--border-color); color: var(--text-color); 
-    padding: 20px; border-radius: 15px; margin-bottom: 15px; width: 100%; text-align: left; 
-    cursor: pointer; font-size: 1.1rem; transition: 0.2s; 
-}
+.option-btn { background: transparent; border: 2px solid var(--border-color); color: var(--text-color); padding: 20px; border-radius: 15px; margin-bottom: 15px; width: 100%; text-align: left; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
 .option-btn:active { background: rgba(128,128,128,0.2); border-color: var(--primary-color); }
 
-/* CONFIG */
 .config-list { display: flex; flex-direction: column; gap: 15px; }
 .config-section-title { font-size: 0.9rem; color: var(--primary-color); margin: 20px 0 5px 0; text-transform: uppercase; font-weight: bold; }
 .config-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 10px; }
@@ -155,9 +141,9 @@ body {
 input:checked + .slider { background-color: var(--success); }
 input:checked + .slider:before { transform: translateX(24px); }
 
-/* NAV BAR BLINDADA */
+/* --- CORREÇÃO BARRA MOBILE (Oculta por padrão) --- */
 .bottom-nav {
-    display: none; /* Inicia invisível. JS adiciona a classe .visible */
+    display: none !important; /* SEGURANÇA MÁXIMA */
     position: fixed;
     bottom: 0; left: 0; width: 100%; height: 70px;
     background: var(--nav-bg);
@@ -167,9 +153,9 @@ input:checked + .slider:before { transform: translateX(24px); }
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* O JS adiciona esta classe para mostrar a barra */
+/* CLASSE QUE O JS VAI ADICIONAR PARA MOSTRAR */
 .bottom-nav.visible {
-    display: grid !important;
+    display: grid !important; /* FORÇA GRID QUANDO ATIVO */
     grid-template-columns: 1fr 1fr 1fr;
 }
 
@@ -181,7 +167,6 @@ input:checked + .slider:before { transform: translateX(24px); }
 .nav-item span { font-size: 0.75rem; }
 .nav-item.active { color: var(--primary-color); }
 
-/* MODAL */
 .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; justify-content:center; align-items:center; z-index:999999; }
 .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; width: 85%; border: 1px solid var(--border-color); }
 .mascote-feedback { width: 100px; margin-bottom: 20px; display: block; margin: 0 auto 20px auto; }
