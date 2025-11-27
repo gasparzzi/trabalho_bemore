@@ -1,58 +1,63 @@
 /* === CONFIGURAÇÃO SUPABASE === */
 const SUPABASE_URL = 'https://lslhcoytqzeazhjdbwnp.supabase.co'; 
+// Chave fornecida
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzbGhjb3l0cXplYXpoamRid25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNjE4NzEsImV4cCI6MjA3OTczNzg3MX0.p9gJeTQjdafLx1gq_eAMFiT8aHJmkcnubrkqJEXsVEg'; 
 
-/* === INICIALIZAÇÃO === */
+/* === INICIALIZAÇÃO SEGURA === */
 let supabaseClient = null;
 try {
     if (typeof supabase !== 'undefined') {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase cliente iniciado.");
+    } else {
+        console.error("ERRO CRÍTICO: Biblioteca Supabase não carregada no HTML.");
     }
-} catch (e) { console.error("Erro init"); }
+} catch (e) { console.error("Erro na inicialização:", e); }
 
+/* === FUNÇÕES UTILITÁRIAS === */
 function safeSetText(id, text) {
     const el = document.getElementById(id);
     if (el) el.innerText = text;
 }
 
-/* === DADOS DIDÁTICOS === */
+/* === BANCO DE DADOS DIDÁTICO (CONTEÚDO) === */
 const DBService = {
     getPerguntas: function(aulaId) {
         // AULA 101: INTRODUÇÃO
         if (aulaId === 101) return [
-            { dica: "A tela principal do Windows chama-se 'Área de Trabalho' (Desktop). É onde seus ícones ficam.", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
+            { dica: "A tela principal do Windows chama-se 'Área de Trabalho' (Desktop).", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
             { dica: "A Barra de Tarefas fica embaixo e mostra os programas abertos.", p: "Onde fica a Barra de Tarefas?", ops: ["No topo", "Na parte inferior", "Não existe", "No meio"], c: 1 },
             { dica: "O Botão Iniciar (logo do Windows) abre o menu com todos os seus programas.", p: "Para ver todos os programas, clicamos em:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
-            { dica: "Pastas (ícones amarelos) servem para guardar e organizar seus arquivos.", p: "Para que servem as pastas amarelas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
-            { dica: "Para fechar uma janela, clique no X no canto superior direito.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
-            { dica: "Ctrl + C serve para COPIAR um arquivo ou texto.", p: "Atalho para copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
-            { dica: "Ctrl + V serve para COLAR o que você copiou.", p: "Atalho para colar:", ops: ["Ctrl+V", "Ctrl+P", "Ctrl+C", "Enter"], c: 0 },
-            { dica: "Arquivos apagados vão para a Lixeira antes de sumirem de vez.", p: "Arquivos deletados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
-            { dica: "Use o botão DIREITO do mouse para ver opções como Renomear.", p: "Para ver opções extras, use o botão:", ops: ["Esquerdo", "Direito", "Meio", "Nenhum"], c: 1 },
-            { dica: "Navegadores (Chrome, Edge) são programas para acessar a internet.", p: "O que é um Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
-            { dica: "O ícone de alto-falante perto do relógio controla o volume.", p: "Ícone de som:", ops: ["Bateria", "Alto-falante", "Globo", "Cadeado"], c: 1 },
-            { dica: "Caps Lock ou Shift deixam as letras MAIÚSCULAS.", p: "Tecla para letra grande:", ops: ["Ctrl", "Alt", "Shift", "Tab"], c: 2 },
-            { dica: "Alt + Tab alterna entre as janelas abertas.", p: "Alt + Tab serve para:", ops: ["Desligar", "Alternar janelas", "Menu", "Print"], c: 1 },
-            { dica: "O Explorador de Arquivos é onde você gerencia suas pastas.", p: "Onde vemos nossas pastas?", ops: ["Internet", "Explorador de Arquivos", "Fotos", "Música"], c: 1 },
-            { dica: "Nunca desligue direto da tomada. Use o menu Iniciar > Desligar.", p: "Como desligar corretamente?", ops: ["Tomada", "Botão da tela", "Menu Iniciar", "Esperar"], c: 2 }
+            { dica: "Pastas (ícones amarelos) servem para guardar arquivos.", p: "Para que servem as pastas amarelas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
+            { dica: "O 'X' no canto superior direito fecha a janela.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
+            { dica: "Ctrl + C serve para COPIAR.", p: "Atalho para copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
+            { dica: "Ctrl + V serve para COLAR.", p: "Atalho para colar:", ops: ["Ctrl+V", "Ctrl+P", "Ctrl+C", "Enter"], c: 0 },
+            { dica: "Arquivos apagados vão para a Lixeira.", p: "Arquivos deletados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
+            { dica: "O botão DIREITO do mouse abre o menu de opções.", p: "Para ver opções extras, use o botão:", ops: ["Esquerdo", "Direito", "Meio", "Nenhum"], c: 1 },
+            { dica: "Navegadores (Chrome, Edge) acessam a internet.", p: "O que é um Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
+            { dica: "O ícone de alto-falante controla o som.", p: "Ícone de som:", ops: ["Bateria", "Alto-falante", "Globo", "Cadeado"], c: 1 },
+            { dica: "Caps Lock deixa as letras MAIÚSCULAS.", p: "Tecla para letra grande:", ops: ["Ctrl", "Alt", "Shift", "Tab"], c: 2 },
+            { dica: "Alt + Tab alterna entre janelas.", p: "Alt + Tab serve para:", ops: ["Desligar", "Alternar janelas", "Menu", "Print"], c: 1 },
+            { dica: "O Explorador de Arquivos gerencia suas pastas.", p: "Onde vemos nossas pastas?", ops: ["Internet", "Explorador de Arquivos", "Fotos", "Música"], c: 1 },
+            { dica: "Use o menu Iniciar > Desligar para encerrar.", p: "Como desligar corretamente?", ops: ["Tomada", "Botão da tela", "Menu Iniciar", "Esperar"], c: 2 }
         ];
         // AULA 102: ÁREA DE TRABALHO
         if (aulaId === 102) return [
-            { dica: "Ícones são atalhos visuais para abrir programas rapidamente.", p: "O que é um ícone?", ops: ["Vírus", "Atalho visual", "Erro", "Pasta"], c: 1 },
-            { dica: "Para mover uma janela, clique e arraste pela Barra de Título (topo).", p: "Onde clicar para arrastar a janela?", ops: ["Barra de título", "Espaço", "Borda", "Lixeira"], c: 0 },
-            { dica: "O botão de traço (-) serve para Minimizar (esconder na barra).", p: "O botão (-) faz o quê?", ops: ["Fecha", "Minimiza", "Maximiza", "Apaga"], c: 1 },
-            { dica: "Para selecionar tudo numa pasta, use o atalho Ctrl + A.", p: "Atalho para selecionar tudo:", ops: ["Ctrl+A", "Ctrl+C", "Alt+F4", "F5"], c: 0 },
-            { dica: "O Papel de Parede é a imagem de fundo da sua Área de Trabalho.", p: "Onde fica o papel de parede?", ops: ["Lixeira", "Área de Trabalho", "Windows", "Nuvem"], c: 1 },
-            { dica: "Para criar uma pasta nova: Botão Direito > Novo > Pasta.", p: "Como criar pasta nova?", ops: ["Botão Direito > Novo", "Desligar", "Google", "Nada"], c: 0 },
-            { dica: "A tecla PrintScreen tira uma 'foto' (captura) da sua tela.", p: "Para que serve PrintScreen?", ops: ["Imprime", "Foto da tela", "Desligar", "Salva"], c: 1 },
-            { dica: "Shift + Delete apaga um arquivo PERMANENTEMENTE (sem lixeira).", p: "Apagar sem ir para lixeira:", ops: ["Shift+Del", "Del", "Ctrl+X", "Alt+F4"], c: 0 },
-            { dica: "O relógio do Windows geralmente fica no canto inferior direito.", p: "Onde fica o relógio?", ops: ["Canto Inferior Direito", "Menu", "Janela", "Topo"], c: 0 },
-            { dica: "Um Duplo Clique (2x) serve para abrir arquivos e pastas.", p: "Para abrir uma pasta, usamos:", ops: ["1 clique", "Duplo Clique", "Arrastar", "Renomear"], c: 1 },
-            { dica: "A Lixeira guarda arquivos apagados caso você queira recuperar.", p: "Para que serve a Lixeira?", ops: ["Recuperar apagados", "Vírus", "Limpeza", "Jogos"], c: 0 },
-            { dica: "A tecla F5 atualiza a página ou a pasta.", p: "Tecla para atualizar:", ops: ["F5", "F1", "F12", "Esc"], c: 0 },
-            { dica: "Você pode ter várias janelas e programas abertos ao mesmo tempo.", p: "Podemos abrir vários programas?", ops: ["Sim", "Não", "Só 3", "Pagar"], c: 0 },
-            { dica: "A tecla com o logo do Windows abre o Menu Iniciar.", p: "Botão Windows abre:", ops: ["Menu Iniciar", "Google", "Excel", "Nada"], c: 0 },
-            { dica: "Se um programa travar, use Alt + F4 para forçar o fechamento.", p: "Como fechar programa travado?", ops: ["Alt+F4", "Gritar", "Clicar", "Esperar"], c: 0 }
+            { dica: "Ícones são atalhos visuais para programas.", p: "O que é um ícone?", ops: ["Vírus", "Atalho visual", "Erro", "Pasta"], c: 1 },
+            { dica: "Arraste a janela pela Barra de Título (topo).", p: "Onde clicar para arrastar a janela?", ops: ["Barra de título", "Espaço", "Borda", "Lixeira"], c: 0 },
+            { dica: "O botão (-) Minimiza (esconde) a janela.", p: "O botão (-) faz o quê?", ops: ["Fecha", "Minimiza", "Maximiza", "Apaga"], c: 1 },
+            { dica: "Ctrl + A seleciona TUDO (All).", p: "Atalho para selecionar tudo:", ops: ["Ctrl+A", "Ctrl+C", "Alt+F4", "F5"], c: 0 },
+            { dica: "Papel de Parede é o fundo da Área de Trabalho.", p: "Onde fica o papel de parede?", ops: ["Lixeira", "Área de Trabalho", "Windows", "Nuvem"], c: 1 },
+            { dica: "Botão Direito > Novo > Pasta cria diretórios.", p: "Como criar pasta nova?", ops: ["Botão Direito > Novo", "Desligar", "Google", "Nada"], c: 0 },
+            { dica: "PrintScreen tira foto da tela.", p: "Para que serve PrintScreen?", ops: ["Imprime", "Foto da tela", "Desligar", "Salva"], c: 1 },
+            { dica: "Shift + Del apaga sem passar pela lixeira.", p: "Apagar sem ir para lixeira:", ops: ["Shift+Del", "Del", "Ctrl+X", "Alt+F4"], c: 0 },
+            { dica: "O relógio fica no canto inferior direito.", p: "Onde fica o relógio?", ops: ["Canto Inferior Direito", "Menu", "Janela", "Topo"], c: 0 },
+            { dica: "Duplo clique abre arquivos.", p: "Para abrir uma pasta, usamos:", ops: ["1 clique", "Duplo Clique", "Arrastar", "Renomear"], c: 1 },
+            { dica: "A Lixeira guarda arquivos temporariamente.", p: "Para que serve a Lixeira?", ops: ["Recuperar apagados", "Vírus", "Limpeza", "Jogos"], c: 0 },
+            { dica: "F5 atualiza a tela.", p: "Tecla para atualizar:", ops: ["F5", "F1", "F12", "Esc"], c: 0 },
+            { dica: "Você pode ter vários programas abertos.", p: "Podemos abrir vários programas?", ops: ["Sim", "Não", "Só 3", "Pagar"], c: 0 },
+            { dica: "A tecla Windows abre o Menu Iniciar.", p: "Botão Windows abre:", ops: ["Menu Iniciar", "Google", "Excel", "Nada"], c: 0 },
+            { dica: "Alt + F4 fecha programas travados.", p: "Como fechar programa travado?", ops: ["Alt+F4", "Gritar", "Clicar", "Esperar"], c: 0 }
         ];
         return [];
     },
@@ -60,9 +65,7 @@ const DBService = {
     getTrilhas: function() {
         return [
             {
-                id: 1, 
-                titulo: "Windows Essencial", 
-                icone: "fab fa-windows", // <--- CORREÇÃO AQUI (fab para marcas)
+                id: 1, titulo: "Windows Essencial", icone: "fab fa-windows", // Ícone corrigido
                 aulas: [
                     {id:101, titulo:"Introdução", ordem:1}, 
                     {id:102, titulo:"Área de Trabalho", ordem:2}, 
@@ -70,9 +73,7 @@ const DBService = {
                 ]
             },
             {
-                id: 2, 
-                titulo: "Internet e Web", 
-                icone: "fas fa-globe", // <--- CORREÇÃO AQUI (fas para solidos)
+                id: 2, titulo: "Internet e Web", icone: "fas fa-globe",
                 aulas: [
                     {id:201, titulo:"Navegadores", ordem:1}, 
                     {id:202, titulo:"Sites e Links", ordem:2}
@@ -81,23 +82,50 @@ const DBService = {
         ];
     },
 
+    /* === INTEGRAÇÃO COM BANCO DE DADOS === */
     getProgresso: async function(userId) {
         if (!supabaseClient) return [];
-        const { data } = await supabaseClient.from('progresso_aluno').select('*').eq('usuario_id', userId);
-        return data || [];
+        try {
+            const { data, error } = await supabaseClient
+                .from('progresso_aluno')
+                .select('*')
+                .eq('usuario_id', userId);
+            
+            if(error) throw error;
+            return data || [];
+        } catch(e) { 
+            console.warn("Falha ao buscar progresso (Online):", e.message);
+            return []; 
+        }
     },
 
+    // *** CORREÇÃO PRINCIPAL DE SALVAMENTO ***
     salvarProgresso: async function(userId, aulaId, estrelas) {
-        if (!supabaseClient) return;
+        // 1. Se não tiver cliente ou for usuário falso (999), não salva no banco real
+        if (!supabaseClient || userId === 999) {
+            console.warn("Modo Offline: Progresso salvo apenas na memória local.");
+            return;
+        }
+
         try {
+            console.log(`Tentando salvar no banco: User=${userId}, Aula=${aulaId}, Estrelas=${estrelas}`);
+            
+            // Usa UPSERT: Se existir (userId+aulaId), atualiza. Se não, cria.
+            // Requer que você tenha criado a constraint UNIQUE no banco (passo SQL anterior).
             const { error } = await supabaseClient
                 .from('progresso_aluno')
                 .upsert(
                     { usuario_id: userId, aula_id: aulaId, status: 'concluida', estrelas: estrelas },
                     { onConflict: 'usuario_id, aula_id' }
                 );
-            if(error) console.error("Erro ao salvar:", error);
-        } catch(e) { console.error("Exceção:", e); }
+
+            if(error) {
+                console.error("ERRO AO SALVAR NO BANCO:", error);
+                alert("Aviso: Não foi possível sincronizar com o servidor. Verifique o console.");
+            } else {
+                console.log("Progresso sincronizado com sucesso!");
+            }
+        } catch(e) { console.error("Exceção crítica ao salvar:", e); }
     },
 
     atualizarUsuario: async function(uid, dados) {
@@ -106,23 +134,36 @@ const DBService = {
     }
 };
 
-/* === APP CONTROLLER === */
+/* === CONTROLE DO APP === */
 const app = {
     user: null,
     vidas: 15,
-    progressoLocal: [],
+    progressoLocal: [], // Armazena o estado atual da sessão
     
+    // Navegação entre telas e controle da barra inferior
     navegar: function(screenId) {
-        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
-        const target = document.getElementById(screenId);
-        if(target) { target.style.display = 'flex'; setTimeout(() => target.classList.add('active'), 10); }
+        // 1. Esconde todas as telas
+        document.querySelectorAll('.screen').forEach(s => { 
+            s.classList.remove('active'); 
+            s.style.display = 'none'; 
+        });
         
+        // 2. Mostra a tela desejada
+        const target = document.getElementById(screenId);
+        if(target) { 
+            target.style.display = 'flex'; 
+            setTimeout(() => target.classList.add('active'), 10); 
+        }
+        
+        // 3. Controla a Barra de Navegação (Fixo no Mobile)
         const nav = document.getElementById('bottomNav');
         if(nav) {
             if(['homeScreen', 'rankingScreen', 'configScreen'].includes(screenId)) {
-                nav.style.display = 'flex';
+                nav.style.display = 'flex'; // Mostra a barra
                 this.updateNavIcon(screenId);
-            } else { nav.style.display = 'none'; }
+            } else { 
+                nav.style.display = 'none'; // Esconde a barra (Login, Aula)
+            }
         }
     },
 
@@ -134,37 +175,51 @@ const app = {
     },
 
     toggleAuth: function(tela) {
+        const nav = document.getElementById('bottomNav');
+        if(nav) nav.style.display = 'none'; // Garante que a barra suma
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const t = document.getElementById(tela === 'login' ? 'loginScreen' : 'cadastroScreen');
         if(t) { t.style.display = 'flex'; setTimeout(() => t.classList.add('active'), 10); }
-        const nav = document.getElementById('bottomNav');
-        if(nav) nav.style.display = 'none';
     },
 
+    /* --- LOGIN --- */
     login: async function() {
         const email = document.getElementById('loginEmail').value;
         const senha = document.getElementById('loginPass').value;
         const btn = document.querySelector('#loginScreen .btn-primary');
 
         if(!email || !senha) return alert("Preencha tudo.");
-        if(btn) btn.innerText = "Entrando...";
+        if(btn) btn.innerText = "Conectando...";
 
         try {
-            if(!supabaseClient) throw new Error("Offline");
-            const { data, error } = await supabaseClient.from('usuarios').select('*').eq('email', email).eq('senha_hash', senha).single();
+            if(!supabaseClient) throw new Error("Cliente Offline");
+            
+            const { data, error } = await supabaseClient
+                .from('usuarios')
+                .select('*')
+                .eq('email', email)
+                .eq('senha_hash', senha)
+                .single();
             
             if(error || !data) {
-                alert("Login incorreto.");
+                alert("Login incorreto (ou usuário não existe).");
                 if(btn) btn.innerText = "Entrar";
             } else {
                 this.user = data;
                 this.carregarDadosEdicao();
+                
+                // Busca progresso salvo
                 this.progressoLocal = await DBService.getProgresso(this.user.id);
+                
                 this.loadHome();
                 if(btn) btn.innerText = "Entrar";
             }
         } catch(e) {
-            alert("Erro de conexão.");
+            console.warn("Entrando em modo offline/teste devido a erro:", e);
+            // Fallback para teste
+            this.user = { id: 999, nome: "Visitante", email: email };
+            this.carregarDadosEdicao();
+            this.loadHome();
             if(btn) btn.innerText = "Entrar";
         }
     },
@@ -179,11 +234,12 @@ const app = {
             const { error } = await supabaseClient.from('usuarios').insert([{ nome, email, senha_hash: senha }]);
             if(error) alert("Erro: " + error.message);
             else { alert("Sucesso! Faça login."); this.toggleAuth('login'); }
-        } catch(e) { alert("Erro cadastro."); }
+        } catch(e) { alert("Erro ao cadastrar."); }
     },
 
     logout: function() { location.reload(); },
 
+    /* --- PERFIL --- */
     carregarDadosEdicao: function() {
         if(!this.user) return;
         const inNome = document.getElementById('editNome');
@@ -193,6 +249,8 @@ const app = {
     },
 
     atualizarPerfil: async function() {
+        if(this.user.id === 999) return alert("Modo visitante não salva perfil.");
+        
         const nome = document.getElementById('editNome').value;
         const email = document.getElementById('editEmail').value;
         const senha = document.getElementById('editSenha').value;
@@ -219,10 +277,13 @@ const app = {
         else document.body.classList.remove('light-theme');
     },
 
+    /* --- HOME: LÓGICA DE TRILHAS E BLOQUEIOS --- */
     loadHome: function() {
+        // 1. Atualiza Ofensiva (Fogo)
         const fogo = this.progressoLocal.length > 0 ? 1 : 0;
         safeSetText('userXP', fogo);
 
+        // 2. Renderiza Trilhas
         const container = document.getElementById('trilhasContainer');
         if(!container) return;
         container.innerHTML = '';
@@ -231,14 +292,13 @@ const app = {
 
         trilhas.forEach(trilha => {
             const div = document.createElement('div');
-            // CORREÇÃO AQUI: Removido o 'fas' fixo para usar o ícone correto do objeto
             div.innerHTML = `<div class="trilha-title"><i class="${trilha.icone}"></i> ${trilha.titulo}</div>`;
-            
             const path = document.createElement('div');
             path.className = 'path-container';
             div.appendChild(path);
             container.appendChild(div);
 
+            // Lógica de Bloqueio de Módulo (Internet bloqueada se Windows não acabou)
             let trilhaBloqueada = false;
             if (trilha.id === 2) {
                 const acabouWindows = this.progressoLocal.some(p => p.aula_id === 103);
@@ -255,9 +315,11 @@ const app = {
                     stars = '★'.repeat(q) + '☆'.repeat(3-q); 
                 } else {
                     if (!trilhaBloqueada) {
+                        // 1ª aula libera se a trilha estiver ok
                         if(idx === 0) { 
                             status = 'unlocked'; stars = '☆☆☆'; 
                         } else {
+                            // Outras dependem da anterior
                             const ant = trilha.aulas[idx-1];
                             if(this.progressoLocal.some(p => p.aula_id === ant.id)) { 
                                 status = 'unlocked'; stars = '☆☆☆'; 
@@ -276,21 +338,23 @@ const app = {
                 path.appendChild(node);
             });
         });
+        
         this.navegar('homeScreen');
     },
 
-    /* QUIZ & DICA */
+    /* --- QUIZ & SISTEMA DE DICAS --- */
     quizData: [], qIndex: 0, qAcertos: 0, aulaId: 0, vidas: 15,
 
     iniciarAula: function(id, titulo) {
         const dados = DBService.getPerguntas(id);
-        if(!dados.length) return alert("Em breve!");
+        if(!dados.length) return alert("Conteúdo em breve!");
         
         this.quizData = dados;
         this.qIndex = 0; this.qAcertos = 0; this.vidas = 15; this.aulaId = id;
         
         safeSetText('aulaTituloDisplay', titulo);
         
+        // Reseta interface da dica
         document.getElementById('teachingArea').style.display = 'none';
         document.getElementById('btnDica').style.display = 'inline-flex';
 
@@ -306,6 +370,7 @@ const app = {
     renderQuestao: function() {
         const q = this.quizData[this.qIndex];
         
+        // Prepara a dica (mas deixa escondida)
         document.getElementById('teachingText').innerText = q.dica || "Sem dica disponível.";
         document.getElementById('teachingArea').style.display = 'none';
         document.getElementById('btnDica').style.display = 'inline-flex';
@@ -313,6 +378,7 @@ const app = {
         safeSetText('perguntaTexto', q.p);
         safeSetText('displayVidas', this.vidas);
         
+        // Barra de Progresso
         const bar = document.getElementById('progressBar');
         if(bar) bar.style.width = `${(this.qIndex / this.quizData.length) * 100}%`;
 
@@ -336,12 +402,12 @@ const app = {
         if(i === c) {
             this.qAcertos++;
             safeSetText('feedbackTitle', 'Correto!');
-            safeSetText('feedbackMsg', 'Continue assim.');
+            safeSetText('feedbackMsg', 'Mandou bem.');
             if(img) img.src = "img/mascote_feliz.png";
         } else {
             this.vidas--;
-            safeSetText('feedbackTitle', 'Errado!');
-            safeSetText('feedbackMsg', 'A resposta correta era outra.');
+            safeSetText('feedbackTitle', 'Ops!');
+            safeSetText('feedbackMsg', 'Resposta incorreta.');
             if(img) img.src = "img/mascote_triste.png";
         }
     },
@@ -349,25 +415,40 @@ const app = {
     proximaPergunta: async function() {
         document.getElementById('feedbackModal').style.display = 'none';
 
-        if(this.vidas <= 0) { alert("Game Over"); return this.loadHome(); }
+        if(this.vidas <= 0) { alert("Game Over! Recomeçando..."); return this.loadHome(); }
 
         this.qIndex++;
         if(this.qIndex < this.quizData.length) {
             this.renderQuestao();
         } else {
+            // FIM DA AULA
             const pct = this.qAcertos / this.quizData.length;
             let est = 1;
             if(pct === 1) est = 3; else if(pct > 0.7) est = 2;
 
-            alert(`Concluído! Estrelas: ${est}`);
+            alert(`Aula Concluída! Estrelas: ${est}`);
             
+            // 1. Atualiza Localmente (Feedback Imediato)
             this.progressoLocal = this.progressoLocal.filter(p => p.aula_id !== this.aulaId);
             this.progressoLocal.push({ usuario_id: this.user.id, aula_id: this.aulaId, status: 'concluida', estrelas: est });
             
-            this.loadHome(); 
+            this.loadHome(); // Volta para Home com status novo
+            
+            // 2. Salva no Banco (Segundo Plano)
             await DBService.salvarProgresso(this.user.id, this.aulaId, est);
         }
     },
     
     voltarParaHome: function() { this.loadHome(); }
+};
+
+// Inicializa
+window.onload = function() {
+    // Recupera tema salvo
+    if(localStorage.getItem('tema') === 'light') {
+        document.body.classList.add('light-theme');
+        const sw = document.getElementById('themeSwitch');
+        if(sw) sw.checked = false;
+    }
+    console.log("App carregado.");
 };
