@@ -1,39 +1,31 @@
-/* === CONFIGURAÇÃO SUPABASE === */
 const SUPABASE_URL = 'https://lslhcoytqzeazhjdbwnp.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzbGhjb3l0cXplYXpoamRid25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNjE4NzEsImV4cCI6MjA3OTczNzg3MX0.p9gJeTQjdafLx1gq_eAMFiT8aHJmkcnubrkqJEXsVEg'; 
 
-/* === INICIALIZAÇÃO SEGURA === */
 let supabaseClient = null;
 try {
     if (typeof supabase !== 'undefined') {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log("Supabase Online.");
-    } else {
-        console.warn("Supabase não carregou. Modo Offline ativado.");
     }
-} catch (e) {
-    console.error("Erro inicialização:", e);
-}
+} catch (e) { console.error("Erro init"); }
 
 function safeSetText(id, text) {
     const el = document.getElementById(id);
     if (el) el.innerText = text;
 }
 
-/* === DADOS === */
 const DBService = {
     getPerguntas: function(aulaId) {
         if (aulaId === 101) return [
             { dica: "A tela principal do Windows chama-se 'Área de Trabalho'.", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
             { dica: "A Barra de Tarefas fica embaixo e mostra programas.", p: "Onde fica a Barra de Tarefas?", ops: ["Topo", "Parte Inferior", "Meio", "Não existe"], c: 1 },
             { dica: "Botão Iniciar (logo do Windows) abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
-            { dica: "Pastas amarelas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
+            { dica: "Pastas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
             { dica: "O 'X' fecha a janela.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
             { dica: "Ctrl + C copia.", p: "Atalho Copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
             { dica: "Ctrl + V cola.", p: "Atalho Colar:", ops: ["Ctrl+V", "Ctrl+P", "Ctrl+C", "Enter"], c: 0 },
-            { dica: "Arquivos apagados vão para a Lixeira.", p: "Arquivos apagados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
+            { dica: "Apagados vão para a Lixeira.", p: "Arquivos apagados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
             { dica: "Botão Direito abre opções.", p: "Para ver opções, use botão:", ops: ["Esquerdo", "Direito", "Meio", "Nenhum"], c: 1 },
-            { dica: "Navegadores acessam a internet.", p: "O que é Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
+            { dica: "Navegador acessa internet.", p: "O que é Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
             { dica: "Alto-falante controla som.", p: "Ícone de som:", ops: ["Bateria", "Alto-falante", "Globo", "Cadeado"], c: 1 },
             { dica: "Caps Lock deixa maiúscula.", p: "Tecla letra grande:", ops: ["Ctrl", "Alt", "Shift", "Tab"], c: 2 },
             { dica: "Alt + Tab troca janelas.", p: "Alt+Tab faz:", ops: ["Desliga", "Alterna janelas", "Menu", "Print"], c: 1 },
@@ -75,10 +67,8 @@ const DBService = {
 
     getProgresso: async function(userId) {
         if (!supabaseClient) return [];
-        try {
-            const { data } = await supabaseClient.from('progresso_aluno').select('*').eq('usuario_id', userId);
-            return data || [];
-        } catch(e) { return []; }
+        const { data } = await supabaseClient.from('progresso_aluno').select('*').eq('usuario_id', userId);
+        return data || [];
     },
 
     salvarProgresso: async function(userId, aulaId, estrelas) {
@@ -90,7 +80,7 @@ const DBService = {
                     { usuario_id: userId, aula_id: aulaId, status: 'concluida', estrelas: estrelas },
                     { onConflict: 'usuario_id, aula_id' }
                 );
-            if(error) console.error("Erro Salvar:", error);
+            if(error) console.error("Erro SQL:", error);
         } catch(e) { console.error("Exceção:", e); }
     },
 
@@ -100,12 +90,12 @@ const DBService = {
     }
 };
 
-/* === APP CONTROLLER === */
 const app = {
     user: null,
     vidas: 15,
     progressoLocal: [],
     
+    // NAVEGAÇÃO SEGURA (Controle da barra)
     navegar: function(screenId) {
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const target = document.getElementById(screenId);
@@ -113,13 +103,14 @@ const app = {
         
         const nav = document.getElementById('bottomNav');
         if(nav) {
+            // Remove o display:none manual e adiciona a classe visible
             if(['homeScreen', 'rankingScreen', 'configScreen'].includes(screenId)) {
-                nav.style.display = ''; // Remove inline
-                nav.classList.add('visible'); // Usa classe
+                nav.style.display = ''; // Limpa o inline style
+                nav.classList.add('visible'); // Adiciona o grid
                 this.updateNavIcon(screenId);
             } else { 
-                nav.classList.remove('visible'); 
-                nav.style.display = 'none';
+                nav.classList.remove('visible'); // Remove o grid
+                nav.style.display = 'none'; // Força none
             }
         }
     },
@@ -133,13 +124,12 @@ const app = {
 
     toggleAuth: function(tela) {
         const nav = document.getElementById('bottomNav');
-        if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
+        if(nav) { nav.classList.remove('visible'); nav.style.display = 'none'; }
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const t = document.getElementById(tela === 'login' ? 'loginScreen' : 'cadastroScreen');
         if(t) { t.style.display = 'flex'; setTimeout(() => t.classList.add('active'), 10); }
     },
 
-    /* LOGIN BLINDADO */
     login: async function() {
         const email = document.getElementById('loginEmail').value;
         const senha = document.getElementById('loginPass').value;
@@ -163,9 +153,7 @@ const app = {
                 if(btn) btn.innerText = "Entrar";
             }
         } catch(e) {
-            console.warn("Erro conexão:", e);
-            // Fallback para não travar (Opcional)
-            // alert("Erro de conexão. Verifique a internet."); 
+            alert("Erro de conexão.");
             if(btn) btn.innerText = "Entrar";
         }
     },
@@ -179,8 +167,8 @@ const app = {
         try {
             const { error } = await supabaseClient.from('usuarios').insert([{ nome, email, senha_hash: senha }]);
             if(error) alert("Erro: " + error.message);
-            else { alert("Sucesso! Faça login."); this.toggleAuth('login'); }
-        } catch(e) { alert("Erro ao cadastrar."); }
+            else { alert("Sucesso!"); this.toggleAuth('login'); }
+        } catch(e) { alert("Erro."); }
     },
 
     logout: function() { location.reload(); },
@@ -194,7 +182,7 @@ const app = {
     },
 
     atualizarPerfil: async function() {
-        if(!this.user || this.user.id === 999) return alert("Visitante não salva.");
+        if(this.user.id === 999) return alert("Visitante não salva.");
         const nome = document.getElementById('editNome').value;
         const email = document.getElementById('editEmail').value;
         const senha = document.getElementById('editSenha').value;
@@ -277,7 +265,6 @@ const app = {
         this.navegar('homeScreen');
     },
 
-    /* QUIZ */
     quizData: [], qIndex: 0, qAcertos: 0, aulaId: 0, vidas: 15,
 
     iniciarAula: function(id, titulo) {
@@ -371,7 +358,6 @@ const app = {
 };
 
 window.onload = function() {
-    // Garante que a barra comece oculta
     const nav = document.getElementById('bottomNav');
     if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
 
@@ -380,5 +366,4 @@ window.onload = function() {
         const sw = document.getElementById('themeSwitch');
         if(sw) sw.checked = false;
     }
-    console.log("Sistema Pronto.");
 };
