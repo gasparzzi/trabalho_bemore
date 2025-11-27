@@ -1,8 +1,6 @@
-/* === CONFIGURAÇÃO SUPABASE === */
 const SUPABASE_URL = 'https://lslhcoytqzeazhjdbwnp.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzbGhjb3l0cXplYXpoamRid25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNjE4NzEsImV4cCI6MjA3OTczNzg3MX0.p9gJeTQjdafLx1gq_eAMFiT8aHJmkcnubrkqJEXsVEg'; 
 
-/* === INICIALIZAÇÃO === */
 let supabaseClient = null;
 try {
     if (typeof supabase !== 'undefined') {
@@ -15,28 +13,25 @@ function safeSetText(id, text) {
     if (el) el.innerText = text;
 }
 
-/* === CONTEÚDO DIDÁTICO === */
 const DBService = {
     getPerguntas: function(aulaId) {
-        // 101: INTRODUÇÃO
         if (aulaId === 101) return [
             { dica: "A tela principal do Windows chama-se 'Área de Trabalho'.", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
             { dica: "A Barra de Tarefas fica embaixo e mostra programas.", p: "Onde fica a Barra de Tarefas?", ops: ["Topo", "Parte Inferior", "Meio", "Não existe"], c: 1 },
-            { dica: "Botão Iniciar (logo do Windows) abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
-            { dica: "Pastas amarelas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
+            { dica: "Botão Iniciar abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
+            { dica: "Pastas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
             { dica: "O 'X' fecha a janela.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
             { dica: "Ctrl + C copia.", p: "Atalho Copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
             { dica: "Ctrl + V cola.", p: "Atalho Colar:", ops: ["Ctrl+V", "Ctrl+P", "Ctrl+C", "Enter"], c: 0 },
-            { dica: "Arquivos apagados vão para a Lixeira.", p: "Arquivos apagados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
+            { dica: "Apagados vão para a Lixeira.", p: "Arquivos apagados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
             { dica: "Botão Direito abre opções.", p: "Para ver opções, use botão:", ops: ["Esquerdo", "Direito", "Meio", "Nenhum"], c: 1 },
-            { dica: "Navegadores acessam a internet.", p: "O que é Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
+            { dica: "Navegador acessa internet.", p: "O que é Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
             { dica: "Alto-falante controla som.", p: "Ícone de som:", ops: ["Bateria", "Alto-falante", "Globo", "Cadeado"], c: 1 },
             { dica: "Caps Lock deixa maiúscula.", p: "Tecla letra grande:", ops: ["Ctrl", "Alt", "Shift", "Tab"], c: 2 },
             { dica: "Alt + Tab troca janelas.", p: "Alt+Tab faz:", ops: ["Desliga", "Alterna janelas", "Menu", "Print"], c: 1 },
             { dica: "Explorador gerencia pastas.", p: "Onde vemos pastas?", ops: ["Internet", "Explorador", "Fotos", "Música"], c: 1 },
             { dica: "Menu Iniciar > Desligar.", p: "Como desligar?", ops: ["Tomada", "Botão tela", "Menu Iniciar", "Esperar"], c: 2 }
         ];
-        // 102: ÁREA DE TRABALHO
         if (aulaId === 102) return [
             { dica: "Ícones são atalhos visuais.", p: "O que é um ícone?", ops: ["Vírus", "Atalho visual", "Erro", "Pasta"], c: 1 },
             { dica: "Arraste pela barra de título.", p: "Onde arrastar janela?", ops: ["Barra título", "Espaço", "Borda", "Lixeira"], c: 0 },
@@ -95,13 +90,11 @@ const DBService = {
     }
 };
 
-/* === APP === */
 const app = {
     user: null,
     vidas: 15,
     progressoLocal: [],
     
-    // NAVEGAÇÃO REVISADA (Controle estrito da barra)
     navegar: function(screenId) {
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const target = document.getElementById(screenId);
@@ -109,14 +102,11 @@ const app = {
         
         const nav = document.getElementById('bottomNav');
         if(nav) {
-            // SÓ MOSTRA SE FOR UMA DESSAS TELAS
             if(['homeScreen', 'rankingScreen', 'configScreen'].includes(screenId)) {
-                nav.style.display = 'flex'; // Força visualização
-                nav.classList.add('visible'); // Classe auxiliar CSS
+                nav.classList.add('visible'); // USA CLASSE CSS
                 this.updateNavIcon(screenId);
             } else { 
-                nav.style.display = 'none'; // Esconde em Login, Cadastro, Aula
-                nav.classList.remove('visible');
+                nav.classList.remove('visible'); // REMOVE CLASSE
             }
         }
     },
@@ -129,16 +119,13 @@ const app = {
     },
 
     toggleAuth: function(tela) {
-        // GARANTE QUE A BARRA SUMA
         const nav = document.getElementById('bottomNav');
-        if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
-
+        if(nav) nav.classList.remove('visible');
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
         const t = document.getElementById(tela === 'login' ? 'loginScreen' : 'cadastroScreen');
         if(t) { t.style.display = 'flex'; setTimeout(() => t.classList.add('active'), 10); }
     },
 
-    /* LOGIN */
     login: async function() {
         const email = document.getElementById('loginEmail').value;
         const senha = document.getElementById('loginPass').value;
@@ -152,13 +139,13 @@ const app = {
             const { data, error } = await supabaseClient.from('usuarios').select('*').eq('email', email).eq('senha_hash', senha).single();
             
             if(error || !data) {
-                alert("Dados incorretos.");
+                alert("Login incorreto.");
                 if(btn) btn.innerText = "Entrar";
             } else {
                 this.user = data;
                 this.carregarDadosEdicao();
                 this.progressoLocal = await DBService.getProgresso(this.user.id);
-                this.loadHome(); // AQUI ELE CHAMA NAVEGAR E MOSTRA A BARRA
+                this.loadHome();
                 if(btn) btn.innerText = "Entrar";
             }
         } catch(e) {
@@ -215,7 +202,6 @@ const app = {
         localStorage.setItem('tema', chk.checked ? 'dark' : 'light');
     },
 
-    /* HOME */
     loadHome: function() {
         const fogo = this.progressoLocal.length > 0 ? 1 : 0;
         safeSetText('userXP', fogo);
@@ -271,11 +257,9 @@ const app = {
                 path.appendChild(node);
             });
         });
-        
         this.navegar('homeScreen');
     },
 
-    /* QUIZ */
     quizData: [], qIndex: 0, qAcertos: 0, aulaId: 0, vidas: 15,
 
     iniciarAula: function(id, titulo) {
@@ -368,17 +352,13 @@ const app = {
     voltarParaHome: function() { this.loadHome(); }
 };
 
-/* INICIALIZAÇÃO E GARANTIA DA BARRA */
 window.onload = function() {
-    // 1. Força a barra a sumir no início (Tela de Login)
     const nav = document.getElementById('bottomNav');
-    if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
+    if(nav) nav.classList.remove('visible');
 
-    // 2. Recupera Tema
     if(localStorage.getItem('tema') === 'light') {
         document.body.classList.add('light-theme');
         const sw = document.getElementById('themeSwitch');
         if(sw) sw.checked = false;
     }
-    console.log("App carregado.");
 };

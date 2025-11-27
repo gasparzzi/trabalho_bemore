@@ -14,7 +14,6 @@
     --nav-bg: #151f2e;
 }
 
-/* TEMA CLARO */
 body.light-theme {
     --bg-color: #f0f2f5;
     --card-bg: #ffffff;
@@ -33,11 +32,14 @@ body {
     color: var(--text-color);
     height: 100vh;
     width: 100vw;
-    overflow: hidden; /* Impede rolagem na página inteira */
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .app-container {
     width: 100%;
+    max-width: 100%;
     height: 100%;
     background-color: var(--bg-color);
     position: relative;
@@ -46,14 +48,14 @@ body {
     overflow: hidden;
 }
 
-/* --- TELAS (Padding extra no fundo para a barra não cobrir) --- */
+/* SCROLL E TELAS */
 .screen {
     display: none;
     flex-direction: column;
     height: 100%;
     width: 100%;
     padding: 20px;
-    padding-bottom: 120px; /* AUMENTADO: Espaço para a barra não cobrir o último item */
+    padding-bottom: 140px; /* Garante que o conteúdo não fique atrás da barra */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background-color: var(--bg-color);
@@ -63,7 +65,7 @@ body {
 .screen.active { display: flex !important; z-index: 20; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* --- LOGIN --- */
+/* LOGIN */
 .logo-container { display: flex; justify-content: center; margin: 40px 0 20px 0; }
 .app-logo { max-width: 150px; height: auto; }
 .mascote-intro { width: 120px; display: block; margin: 20px auto; }
@@ -83,31 +85,22 @@ body {
 .btn-primary { width: 100%; padding: 16px; background: var(--secondary-color); border: none; color: white; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
 .btn-secondary { width: 100%; padding: 16px; background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 .toggle-text { text-align: center; margin-top: 20px; color: var(--text-muted); }
-.toggle-text span { color: var(--primary-color); font-weight: bold; }
+.toggle-text span { color: var(--primary-color); font-weight: bold; cursor: pointer; }
 
-/* --- TRILHAS --- */
-.header-top { 
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 20px 0; 
-    background: var(--bg-color); 
-    position: sticky; top: 0; z-index: 30;
-}
+/* TRILHA */
+.header-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; background: var(--bg-color); position: sticky; top: 0; z-index: 30; }
 .xp-badge { background: var(--card-bg); padding: 8px 15px; border-radius: 20px; font-weight: bold; color: var(--gold); border: 1px solid var(--border-color); }
 
 .trilha-title { font-size: 1.1rem; color: var(--primary-color); margin: 30px 0; border-left: 5px solid var(--secondary-color); padding-left: 15px; text-transform: uppercase; font-weight: bold; }
-
 .path-container { display: flex; flex-direction: column; align-items: center; gap: 60px; position: relative; padding-bottom: 30px; }
-/* Linha vertical centralizada */
-.path-container::before { content: ''; position: absolute; top: 40px; bottom: 40px; width: 4px; background: var(--border-color); z-index: 0; left: 50%; transform: translateX(-50%); }
+.path-container::before { content: ''; position: absolute; top: 40px; bottom: 40px; width: 4px; background: var(--border-color); z-index: 0; }
 
 .aula-node {
     width: 90px; height: 90px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
     position: relative; z-index: 2; cursor: pointer; border: 6px solid var(--bg-color); background: var(--card-bg);
 }
 .aula-node:active { transform: scale(0.95); }
-
-/* AJUSTE DO ZIG-ZAG (Reduzido para não quebrar em telas pequenas) */
-.aula-node:nth-child(odd) { margin-right: 60px; } 
+.aula-node:nth-child(odd) { margin-right: 60px; }
 .aula-node:nth-child(even) { margin-left: 60px; }
 
 .aula-node.unlocked { background: var(--secondary-color); border-color: #5dade2; box-shadow: 0 0 20px rgba(52, 152, 219, 0.4); }
@@ -121,7 +114,7 @@ body {
 .star.active { color: var(--gold); }
 .node-label { position: absolute; bottom: -35px; width: 160px; text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); background: var(--bg-color); padding: 2px; }
 
-/* --- AULA --- */
+/* AULA */
 .top-bar { display: flex; align-items: center; margin-bottom: 20px; justify-content: space-between; }
 .close-btn { font-size: 2.5rem; cursor: pointer; color: var(--text-muted); padding: 10px; }
 .progress-bar-container { flex-grow: 1; height: 12px; background: var(--border-color); border-radius: 6px; margin: 0 15px; overflow: hidden; }
@@ -130,6 +123,7 @@ body {
 
 .question-text { font-size: 1.3rem; text-align: center; margin: 30px 0 50px 0; line-height: 1.5; color: var(--text-color); }
 
+/* DICA */
 .btn-hint {
     background: transparent; border: 2px dashed var(--text-muted); color: var(--text-muted);
     padding: 12px 20px; border-radius: 25px; font-size: 0.9rem; font-weight: bold;
@@ -150,7 +144,7 @@ body {
 }
 .option-btn:active { background: rgba(128,128,128,0.2); border-color: var(--primary-color); }
 
-/* --- CONFIG --- */
+/* CONFIG */
 .config-list { display: flex; flex-direction: column; gap: 15px; }
 .config-section-title { font-size: 0.9rem; color: var(--primary-color); margin: 20px 0 5px 0; text-transform: uppercase; font-weight: bold; }
 .config-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 10px; }
@@ -161,38 +155,27 @@ body {
 input:checked + .slider { background-color: var(--success); }
 input:checked + .slider:before { transform: translateX(24px); }
 
-/* --- CORREÇÃO DA BARRA DE NAVEGAÇÃO (GRID) --- */
+/* NAV BAR BLINDADA */
 .bottom-nav {
-    display: none; /* JS controla o display */
+    display: none; /* Inicia invisível. JS adiciona a classe .visible */
     position: fixed;
-    bottom: 0; left: 0;
-    width: 100%; /* Largura total da tela */
-    height: 70px;
+    bottom: 0; left: 0; width: 100%; height: 70px;
     background: var(--nav-bg);
     border-top: 1px solid var(--border-color);
-    z-index: 99999; /* Acima de tudo */
+    z-index: 99999;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
-    
-    /* Layout em GRID para dividir perfeitamente em 3 */
-    display: grid; 
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* O JS adiciona esta classe para mostrar a barra */
+.bottom-nav.visible {
+    display: grid !important;
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* O JS pode tentar colocar display: flex, então forçamos grid quando tiver a classe active-grid (opcional) ou garantimos no CSS */
-/* Se o JS colocar display: flex, vai quebrar. Vamos forçar !important aqui para garantir o Grid se o elemento estiver visível */
-.bottom-nav[style*="display: flex"] {
-    display: grid !important;
-}
-
 .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    cursor: pointer;
-    height: 100%;
-    -webkit-tap-highlight-color: transparent;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--text-muted); cursor: pointer; height: 100%;
 }
 .nav-item i { font-size: 1.5rem; margin-bottom: 4px; }
 .nav-item span { font-size: 0.75rem; }
