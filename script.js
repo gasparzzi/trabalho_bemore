@@ -1,175 +1,84 @@
-/* === CONTEÚDO DIDÁTICO REVISADO (CENÁRIOS REAIS) === */
+/* === CONFIGURAÇÃO SUPABASE === */
+const SUPABASE_URL = 'https://lslhcoytqzeazhjdbwnp.supabase.co'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzbGhjb3l0cXplYXpoamRid25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNjE4NzEsImV4cCI6MjA3OTczNzg3MX0.p9gJeTQjdafLx1gq_eAMFiT8aHJmkcnubrkqJEXsVEg'; 
+
+/* === INICIALIZAÇÃO SEGURA === */
+let supabaseClient = null;
+try {
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase Online.");
+    } else {
+        console.warn("Supabase não carregou. Modo Offline ativado.");
+    }
+} catch (e) {
+    console.error("Erro inicialização:", e);
+}
+
+function safeSetText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text;
+}
+
+/* === DADOS === */
 const DBService = {
     getPerguntas: function(aulaId) {
-        // AULA 101: CONHECENDO O AMBIENTE (Windows)
         if (aulaId === 101) return [
-            { 
-                dica: "A 'Área de Trabalho' é como se fosse sua mesa real de estudos: é onde você deixa os trabalhos que está usando agora e as ferramentas principais.",
-                p: "Você acabou de ligar o computador. Qual é o nome da tela principal que aparece, onde ficam o papel de parede e os ícones?", 
-                ops: ["Tela de Bloqueio", "Área de Trabalho (Desktop)", "Protetor de Tela", "Painel de Controle"], c: 1 
-            },
-            { 
-                dica: "A Barra de Tarefas (aquela faixa lá embaixo) serve para multitarefa. Ela mostra quais programas estão abertos para você não se perder.",
-                p: "Você está escrevendo um texto e ouvindo música ao mesmo tempo. Onde você olha para ver quais programas estão abertos?", 
-                ops: ["Na Lixeira", "No Menu Iniciar", "Na Barra de Tarefas", "Dentro da pasta Documentos"], c: 2 
-            },
-            { 
-                dica: "O Menu Iniciar é o 'mapa' do seu computador. Se você não acha um programa na tela, ele com certeza está lá.",
-                p: "Você quer abrir a Calculadora, mas não tem ícone na tela. Onde você clica para procurar qualquer programa instalado?", 
-                ops: ["No botão Iniciar (Logo Windows)", "No relógio", "No ícone de Wi-Fi", "No botão de desligar"], c: 0 
-            },
-            { 
-                dica: "Ícones são atalhos. Pense neles como botões mágicos que te levam direto para um lugar (programa ou pasta) sem ter que caminhar até lá.",
-                p: "O que são as pequenas figuras clicáveis espalhadas pela sua tela?", 
-                ops: ["Vírus de computador", "Erros do sistema", "Ícones (Atalhos)", "Decorações fixas"], c: 2 
-            },
-            { 
-                dica: "O cursor do mouse muda de formato. Se virar uma ampulheta ou círculo girando, o computador está pensando.",
-                p: "Você clicou para abrir um programa e o cursor do mouse virou um círculo girando. O que isso significa?", 
-                ops: ["Que o computador travou para sempre", "Que o computador está processando (carregando)", "Que a internet caiu", "Que você deve desligar imediatamente"], c: 1 
-            },
-            { 
-                dica: "Clique com o botão DIREITO do mouse quando quiser ver 'opções extras' ou 'propriedades' de algo. O esquerdo é para ação direta.",
-                p: "Você quer mudar o nome de uma pasta, mas não sabe o atalho. Qual botão do mouse abre o menu de opções?", 
-                ops: ["O botão Esquerdo (Principal)", "A rodinha do meio (Scroll)", "O botão Direito (Secundário)", "Os dois ao mesmo tempo"], c: 2 
-            },
-            { 
-                dica: "A Lixeira é uma segurança. Se apagar algo sem querer, pode resgatar de lá. Mas se esvaziar a lixeira, já era!",
-                p: "Você apagou uma foto importante por engano! Onde você deve procurar para tentar recuperá-la?", 
-                ops: ["Na Barra de Tarefas", "Na Lixeira", "No Menu Iniciar", "Na pasta de Downloads"], c: 1 
-            },
-            { 
-                dica: "Desligar o computador incorretamente (puxando o fio) pode corromper seus arquivos. O sistema precisa 'arrumar a casa' antes de sair.",
-                p: "Qual é a forma segura de desligar o computador para não estragar o sistema?", 
-                ops: ["Apertar o botão do monitor", "Puxar o cabo da tomada", "Fechar a tampa do notebook", "Menu Iniciar > Ligar/Desligar > Desligar"], c: 3 
-            },
-            { 
-                dica: "Reiniciar é o remédio sagrado da informática. Ele limpa a memória temporária e resolve pequenos erros.",
-                p: "Seu computador está lento e travando. Qual a primeira coisa que um técnico recomendaria fazer?", 
-                ops: ["Comprar um novo", "Reiniciar o sistema", "Apagar todos os arquivos", "Bater no gabinete"], c: 1 
-            },
-            { 
-                dica: "O Explorador de Arquivos (ícone de pasta amarela) é onde você gerencia seus documentos, fotos e downloads.",
-                p: "Você baixou uma imagem da internet e quer encontrá-la. Qual programa você abre para navegar nas suas pastas?", 
-                ops: ["Google Chrome", "Explorador de Arquivos", "Calculadora", "Bloco de Notas"], c: 1 
-            }
+            { dica: "A tela principal do Windows chama-se 'Área de Trabalho'.", p: "Qual o nome da tela inicial do PC?", ops: ["Mesa", "Área de Trabalho", "Janela", "Bloco"], c: 1 },
+            { dica: "A Barra de Tarefas fica embaixo e mostra programas.", p: "Onde fica a Barra de Tarefas?", ops: ["Topo", "Parte Inferior", "Meio", "Não existe"], c: 1 },
+            { dica: "Botão Iniciar (logo do Windows) abre o menu.", p: "Botão para ver programas:", ops: ["Iniciar", "Desligar", "Ajuda", "Wi-Fi"], c: 0 },
+            { dica: "Pastas amarelas guardam arquivos.", p: "Para que servem pastas?", ops: ["Vírus", "Organizar arquivos", "Enfeite", "Sites"], c: 1 },
+            { dica: "O 'X' fecha a janela.", p: "Qual botão fecha a janela?", ops: ["-", "Quadrado", "X", "Bola"], c: 2 },
+            { dica: "Ctrl + C copia.", p: "Atalho Copiar:", ops: ["Ctrl+V", "Ctrl+C", "Alt+F4", "Ctrl+Z"], c: 1 },
+            { dica: "Ctrl + V cola.", p: "Atalho Colar:", ops: ["Ctrl+V", "Ctrl+P", "Ctrl+C", "Enter"], c: 0 },
+            { dica: "Arquivos apagados vão para a Lixeira.", p: "Arquivos apagados vão para:", ops: ["Nuvem", "Lixeira", "Correio", "Pen Drive"], c: 1 },
+            { dica: "Botão Direito abre opções.", p: "Para ver opções, use botão:", ops: ["Esquerdo", "Direito", "Meio", "Nenhum"], c: 1 },
+            { dica: "Navegadores acessam a internet.", p: "O que é Navegador?", ops: ["Acessa Internet", "Texto", "Jogo", "Vírus"], c: 0 },
+            { dica: "Alto-falante controla som.", p: "Ícone de som:", ops: ["Bateria", "Alto-falante", "Globo", "Cadeado"], c: 1 },
+            { dica: "Caps Lock deixa maiúscula.", p: "Tecla letra grande:", ops: ["Ctrl", "Alt", "Shift", "Tab"], c: 2 },
+            { dica: "Alt + Tab troca janelas.", p: "Alt+Tab faz:", ops: ["Desliga", "Alterna janelas", "Menu", "Print"], c: 1 },
+            { dica: "Explorador gerencia pastas.", p: "Onde vemos pastas?", ops: ["Internet", "Explorador", "Fotos", "Música"], c: 1 },
+            { dica: "Menu Iniciar > Desligar.", p: "Como desligar?", ops: ["Tomada", "Botão tela", "Menu Iniciar", "Esperar"], c: 2 }
         ];
-
-        // AULA 102: JANELAS E ORGANIZAÇÃO
         if (aulaId === 102) return [
-            { 
-                dica: "Os botões de controle ficam no canto superior direito: Traço (Minimizar), Quadrado (Maximizar) e X (Fechar).",
-                p: "Você quer esconder uma janela momentaneamente para ver a área de trabalho, mas sem fechá-la. Qual botão usa?", 
-                ops: ["O X vermelho", "O quadrado", "O traço (-)", "Alt + F4"], c: 2 
-            },
-            { 
-                dica: "A Barra de Título é o topo da janela. É lá que você 'segura' a janela para arrastá-la pela tela.",
-                p: "Sua janela está cobrindo um ícone que você precisa ver. Onde você clica e segura para arrastar a janela de lugar?", 
-                ops: ["No meio do texto", "Na Barra de Título (topo)", "Na borda inferior", "No botão de fechar"], c: 1 
-            },
-            { 
-                dica: "Pastas servem para organização. Imagine uma gaveta cheia de papéis soltos: é o caos. Pastas resolvem isso.",
-                p: "Sua Área de Trabalho está cheia de fotos espalhadas. Qual a melhor forma de organizar?", 
-                ops: ["Apagar todas as fotos", "Criar uma Pasta chamada 'Fotos' e mover tudo para lá", "Mudar o papel de parede", "Deixar como está"], c: 1 
-            },
-            { 
-                dica: "Maximizar faz a janela ocupar a tela toda para você focar. Restaurar faz ela voltar ao tamanho pequeno.",
-                p: "A janela está pequena e você quer que ela ocupe a tela inteira para ler melhor. O que você faz?", 
-                ops: ["Clica no botão Maximizar (Quadrado)", "Puxa as bordas manualmente", "Minimiza a janela", "Compra um monitor maior"], c: 0 
-            },
-            { 
-                dica: "Selecionar vários arquivos de uma vez economiza tempo. Você pode clicar e arrastar o mouse para criar uma caixa de seleção.",
-                p: "Você quer mover 10 arquivos para uma pasta. Como fazer isso rápido?", 
-                ops: ["Mover um por um", "Clicar e arrastar o mouse para selecionar todos e mover juntos", "Abrir 10 janelas diferentes", "Renomear todos"], c: 1 
-            },
-            { 
-                dica: "Ctrl + Z é o atalho de 'Desfazer'. Se você apagou algo ou escreveu errado, ele volta no tempo.",
-                p: "Ops! Você apagou um texto sem querer. Qual atalho mágico desfaz sua última ação?", 
-                ops: ["Ctrl + C", "Ctrl + V", "Ctrl + Z", "Alt + F4"], c: 2 
-            },
-            { 
-                dica: "Alt + Tab é o atalho da produtividade. Ele permite trocar de janelas sem tirar a mão do teclado.",
-                p: "Você está jogando, mas o chefe chegou. Qual atalho troca rapidamente para a janela de trabalho?", 
-                ops: ["Alt + Tab", "Ctrl + Alt + Del", "F5", "Esc"], c: 0 
-            },
-            { 
-                dica: "Renomear arquivos ajuda a encontrá-los depois. 'Trabalho_Final_Versão_2' é melhor que 'Sem_Título_1'.",
-                p: "Para mudar o nome de um arquivo selecionado, você pode apertar qual tecla?", 
-                ops: ["F2", "F5", "Delete", "Enter"], c: 0 
-            },
-            { 
-                dica: "A tecla Windows + D minimiza TUDO de uma vez e mostra a Área de Trabalho (Desktop).",
-                p: "Tem muitas janelas abertas e você quer ver a área de trabalho limpa imediatamente. Qual o atalho?", 
-                ops: ["Fechar uma por uma", "Windows + D", "Ctrl + C", "Desligar o monitor"], c: 1 
-            },
-            { 
-                dica: "Arquivos têm extensões. '.jpg' é imagem, '.mp3' é música, '.docx' é documento de texto.",
-                p: "Você recebeu um arquivo 'Trabalho.mp3'. Que tipo de arquivo é esse?", 
-                ops: ["Um documento de texto", "Uma planilha", "Uma música/áudio", "Um vírus"], c: 2 
-            }
+            { dica: "Ícones são atalhos visuais.", p: "O que é um ícone?", ops: ["Vírus", "Atalho visual", "Erro", "Pasta"], c: 1 },
+            { dica: "Arraste pela barra de título.", p: "Onde arrastar janela?", ops: ["Barra título", "Espaço", "Borda", "Lixeira"], c: 0 },
+            { dica: "Botão (-) minimiza.", p: "Botão (-) faz:", ops: ["Fecha", "Minimiza", "Maximiza", "Apaga"], c: 1 },
+            { dica: "Ctrl+A seleciona tudo.", p: "Atalho tudo:", ops: ["Ctrl+A", "Ctrl+C", "Alt+F4", "F5"], c: 0 },
+            { dica: "Papel de Parede é o fundo.", p: "Onde fica papel parede?", ops: ["Lixeira", "Área Trabalho", "Windows", "Nuvem"], c: 1 },
+            { dica: "Botão Direito > Novo > Pasta.", p: "Como criar pasta?", ops: ["Botão Direito", "Desligar", "Google", "Nada"], c: 0 },
+            { dica: "PrintScreen tira foto da tela.", p: "PrintScreen faz:", ops: ["Imprime", "Foto tela", "Desligar", "Salva"], c: 1 },
+            { dica: "Shift+Del apaga direto.", p: "Apagar sem lixeira:", ops: ["Shift+Del", "Del", "Ctrl+X", "Alt+F4"], c: 0 },
+            { dica: "Relógio no canto inferior direito.", p: "Onde fica relógio?", ops: ["Canto Inferior", "Menu", "Janela", "Topo"], c: 0 },
+            { dica: "Duplo clique abre.", p: "Para abrir pasta:", ops: ["1 clique", "Duplo Clique", "Arrastar", "Renomear"], c: 1 },
+            { dica: "Lixeira recupera arquivos.", p: "Para que serve Lixeira?", ops: ["Recuperar", "Vírus", "Limpeza", "Jogos"], c: 0 },
+            { dica: "F5 atualiza.", p: "Tecla atualizar:", ops: ["F5", "F1", "F12", "Esc"], c: 0 },
+            { dica: "Pode abrir vários programas.", p: "Pode abrir vários?", ops: ["Sim", "Não", "Só 3", "Pagar"], c: 0 },
+            { dica: "Tecla Windows abre Iniciar.", p: "Botão Windows abre:", ops: ["Menu Iniciar", "Google", "Excel", "Nada"], c: 0 },
+            { dica: "Alt+F4 fecha tudo.", p: "Fechar travado:", ops: ["Alt+F4", "Gritar", "Clicar", "Esperar"], c: 0 }
         ];
-
-        // AULA 201: INTERNET BÁSICA
-        if (aulaId === 201) return [
-            { 
-                dica: "O Navegador (Browser) é o carro que você usa para viajar na estrada da internet.",
-                p: "Qual desses programas serve para acessar sites na internet?", 
-                ops: ["Microsoft Word", "Google Chrome", "Excel", "Photoshop"], c: 1 
-            },
-            { 
-                dica: "A Barra de Endereço fica no topo do navegador. É lá que você digita o destino (ex: youtube.com).",
-                p: "Você quer entrar no site da prefeitura. Onde você digita o endereço 'www.prefeitura.sp.gov.br'?", 
-                ops: ["Na barra de pesquisa do Google", "Na Barra de Endereço (topo do navegador)", "No chat do Facebook", "No menu Iniciar"], c: 1 
-            },
-            { 
-                dica: "Wi-Fi é a conexão sem fio. O cabo azul (Ethernet) é a conexão com fio, geralmente mais rápida e estável.",
-                p: "Seu notebook não conecta no Wi-Fi. Qual cabo você pode usar para conectar direto no roteador?", 
-                ops: ["Cabo HDMI", "Cabo USB", "Cabo de Rede (Ethernet)", "Cabo de Força"], c: 2 
-            },
-            { 
-                dica: "Links são textos ou imagens clicáveis que levam a outra página. Geralmente o cursor vira uma 'mãozinha'.",
-                p: "Como você sabe que um texto azul na internet é um Link clicável?", 
-                ops: ["Ele pisca", "O cursor do mouse vira uma mãozinha ao passar por cima", "Ele desaparece", "O computador apita"], c: 1 
-            },
-            { 
-                dica: "Atualizar a página (F5) serve para carregar novos conteúdos ou tentar corrigir se o site travou.",
-                p: "A página do site carregou pela metade. O que você faz para tentar corrigir?", 
-                ops: ["Clica no botão Atualizar (Seta giratória) ou F5", "Desliga o monitor", "Abre o Word", "Manda um email"], c: 0 
-            }
-        ];
-        
         return [];
     },
 
     getTrilhas: function() {
         return [
             {
-                id: 1, 
-                titulo: "Windows Essencial", 
-                icone: "fab fa-windows",
-                aulas: [
-                    {id:101, titulo:"Primeiros Passos", ordem:1}, 
-                    {id:102, titulo:"Janelas e Pastas", ordem:2}
-                ]
+                id: 1, titulo: "Windows Essencial", icone: "fab fa-windows",
+                aulas: [{id:101, titulo:"Introdução", ordem:1}, {id:102, titulo:"Área de Trabalho", ordem:2}, {id:103, titulo:"Pastas", ordem:3}]
             },
             {
-                id: 2, 
-                titulo: "Internet e Web", 
-                icone: "fas fa-globe",
-                aulas: [
-                    {id:201, titulo:"Navegadores", ordem:1}
-                ]
+                id: 2, titulo: "Internet e Web", icone: "fas fa-globe",
+                aulas: [{id:201, titulo:"Navegadores", ordem:1}, {id:202, titulo:"Sites", ordem:2}]
             }
         ];
     },
 
-    // MANTENHA AS FUNÇÕES ABAIXO IGUAIS (getProgresso, salvarProgresso, etc)
-    // Elas já estão corretas na versão anterior.
-    
     getProgresso: async function(userId) {
         if (!supabaseClient) return [];
-        const { data } = await supabaseClient.from('progresso_aluno').select('*').eq('usuario_id', userId);
-        return data || [];
+        try {
+            const { data } = await supabaseClient.from('progresso_aluno').select('*').eq('usuario_id', userId);
+            return data || [];
+        } catch(e) { return []; }
     },
 
     salvarProgresso: async function(userId, aulaId, estrelas) {
@@ -181,7 +90,7 @@ const DBService = {
                     { usuario_id: userId, aula_id: aulaId, status: 'concluida', estrelas: estrelas },
                     { onConflict: 'usuario_id, aula_id' }
                 );
-            if(error) console.error("Erro SQL:", error);
+            if(error) console.error("Erro Salvar:", error);
         } catch(e) { console.error("Exceção:", e); }
     },
 
@@ -190,4 +99,286 @@ const DBService = {
         return await supabaseClient.from('usuarios').update(dados).eq('id', uid);
     }
 };
-/* FIM DO DBSERVICE */
+
+/* === APP CONTROLLER === */
+const app = {
+    user: null,
+    vidas: 15,
+    progressoLocal: [],
+    
+    navegar: function(screenId) {
+        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
+        const target = document.getElementById(screenId);
+        if(target) { target.style.display = 'flex'; setTimeout(() => target.classList.add('active'), 10); }
+        
+        const nav = document.getElementById('bottomNav');
+        if(nav) {
+            if(['homeScreen', 'rankingScreen', 'configScreen'].includes(screenId)) {
+                nav.style.display = ''; // Remove inline
+                nav.classList.add('visible'); // Usa classe
+                this.updateNavIcon(screenId);
+            } else { 
+                nav.classList.remove('visible'); 
+                nav.style.display = 'none';
+            }
+        }
+    },
+
+    updateNavIcon: function(screenId) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        if(screenId === 'homeScreen') document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+        if(screenId === 'rankingScreen') document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+        if(screenId === 'configScreen') document.querySelector('.nav-item:nth-child(3)').classList.add('active');
+    },
+
+    toggleAuth: function(tela) {
+        const nav = document.getElementById('bottomNav');
+        if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
+        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
+        const t = document.getElementById(tela === 'login' ? 'loginScreen' : 'cadastroScreen');
+        if(t) { t.style.display = 'flex'; setTimeout(() => t.classList.add('active'), 10); }
+    },
+
+    /* LOGIN BLINDADO */
+    login: async function() {
+        const email = document.getElementById('loginEmail').value;
+        const senha = document.getElementById('loginPass').value;
+        const btn = document.querySelector('#loginScreen .btn-primary');
+
+        if(!email || !senha) return alert("Preencha tudo.");
+        if(btn) btn.innerText = "Entrando...";
+
+        try {
+            if(!supabaseClient) throw new Error("Offline");
+            const { data, error } = await supabaseClient.from('usuarios').select('*').eq('email', email).eq('senha_hash', senha).single();
+            
+            if(error || !data) {
+                alert("Login incorreto.");
+                if(btn) btn.innerText = "Entrar";
+            } else {
+                this.user = data;
+                this.carregarDadosEdicao();
+                this.progressoLocal = await DBService.getProgresso(this.user.id);
+                this.loadHome();
+                if(btn) btn.innerText = "Entrar";
+            }
+        } catch(e) {
+            console.warn("Erro conexão:", e);
+            // Fallback para não travar (Opcional)
+            // alert("Erro de conexão. Verifique a internet."); 
+            if(btn) btn.innerText = "Entrar";
+        }
+    },
+
+    registrar: async function() {
+        const nome = document.getElementById('regNome').value;
+        const email = document.getElementById('regEmail').value;
+        const senha = document.getElementById('regPass').value;
+        if(!nome || !email || !senha) return alert("Preencha tudo");
+        
+        try {
+            const { error } = await supabaseClient.from('usuarios').insert([{ nome, email, senha_hash: senha }]);
+            if(error) alert("Erro: " + error.message);
+            else { alert("Sucesso! Faça login."); this.toggleAuth('login'); }
+        } catch(e) { alert("Erro ao cadastrar."); }
+    },
+
+    logout: function() { location.reload(); },
+
+    carregarDadosEdicao: function() {
+        if(!this.user) return;
+        const inNome = document.getElementById('editNome');
+        const inEmail = document.getElementById('editEmail');
+        if(inNome) inNome.value = this.user.nome;
+        if(inEmail) inEmail.value = this.user.email;
+    },
+
+    atualizarPerfil: async function() {
+        if(!this.user || this.user.id === 999) return alert("Visitante não salva.");
+        const nome = document.getElementById('editNome').value;
+        const email = document.getElementById('editEmail').value;
+        const senha = document.getElementById('editSenha').value;
+        const btn = document.querySelector('#configScreen .btn-primary');
+        
+        if(btn) btn.innerText = "Salvando...";
+        const up = { nome, email };
+        if(senha) up.senha_hash = senha;
+
+        const { error } = await DBService.atualizarUsuario(this.user.id, up);
+        if(btn) btn.innerText = "Salvar";
+
+        if(error) alert("Erro."); 
+        else { alert("Atualizado!"); this.user.nome = nome; this.user.email = email; }
+    },
+
+    toggleTheme: function() {
+        const chk = document.getElementById('themeSwitch');
+        if(chk && !chk.checked) document.body.classList.add('light-theme');
+        else document.body.classList.remove('light-theme');
+        localStorage.setItem('tema', chk.checked ? 'dark' : 'light');
+    },
+
+    loadHome: function() {
+        const fogo = this.progressoLocal.length > 0 ? 1 : 0;
+        safeSetText('userXP', fogo);
+
+        const container = document.getElementById('trilhasContainer');
+        if(!container) return;
+        container.innerHTML = '';
+        
+        const trilhas = DBService.getTrilhas();
+
+        trilhas.forEach(trilha => {
+            const div = document.createElement('div');
+            div.innerHTML = `<div class="trilha-title"><i class="${trilha.icone}"></i> ${trilha.titulo}</div>`;
+            const path = document.createElement('div');
+            path.className = 'path-container';
+            div.appendChild(path);
+            container.appendChild(div);
+
+            let trilhaBloqueada = false;
+            if (trilha.id === 2) {
+                const acabouWindows = this.progressoLocal.some(p => p.aula_id === 103);
+                if (!acabouWindows) trilhaBloqueada = true;
+            }
+
+            trilha.aulas.forEach((aula, idx) => {
+                let status = 'locked', stars = '';
+                const prog = this.progressoLocal.find(p => p.aula_id === aula.id);
+                
+                if(prog) { 
+                    status = 'completed'; 
+                    const q = prog.estrelas || 3; 
+                    stars = '★'.repeat(q) + '☆'.repeat(3-q); 
+                } else {
+                    if (!trilhaBloqueada) {
+                        if(idx === 0) { 
+                            status = 'unlocked'; stars = '☆☆☆'; 
+                        } else {
+                            const ant = trilha.aulas[idx-1];
+                            if(this.progressoLocal.some(p => p.aula_id === ant.id)) { 
+                                status = 'unlocked'; stars = '☆☆☆'; 
+                            }
+                        }
+                    }
+                }
+
+                const node = document.createElement('div');
+                node.className = `aula-node ${status}`;
+                node.innerHTML = `<div class="node-stars"><span class="star active">${stars}</span></div>
+                                  <i class="fas ${status === 'completed' ? 'fa-check' : (status === 'locked' ? 'fa-lock' : 'fa-play')}"></i>
+                                  <div class="node-label">${aula.titulo}</div>`;
+                
+                if(status !== 'locked') node.onclick = () => this.iniciarAula(aula.id, aula.titulo);
+                path.appendChild(node);
+            });
+        });
+        
+        this.navegar('homeScreen');
+    },
+
+    /* QUIZ */
+    quizData: [], qIndex: 0, qAcertos: 0, aulaId: 0, vidas: 15,
+
+    iniciarAula: function(id, titulo) {
+        const dados = DBService.getPerguntas(id);
+        if(!dados.length) return alert("Em breve!");
+        
+        this.quizData = dados;
+        this.qIndex = 0; this.qAcertos = 0; this.vidas = 15; this.aulaId = id;
+        
+        safeSetText('aulaTituloDisplay', titulo);
+        
+        document.getElementById('teachingArea').style.display = 'none';
+        document.getElementById('btnDica').style.display = 'inline-flex';
+
+        this.navegar('aulaScreen');
+        this.renderQuestao();
+    },
+
+    mostrarDica: function() {
+        document.getElementById('teachingArea').style.display = 'block';
+        document.getElementById('btnDica').style.display = 'none';
+    },
+
+    renderQuestao: function() {
+        const q = this.quizData[this.qIndex];
+        
+        document.getElementById('teachingText').innerText = q.dica || "Sem dica.";
+        document.getElementById('teachingArea').style.display = 'none';
+        document.getElementById('btnDica').style.display = 'inline-flex';
+
+        safeSetText('perguntaTexto', q.p);
+        safeSetText('displayVidas', this.vidas);
+        
+        const bar = document.getElementById('progressBar');
+        if(bar) bar.style.width = `${(this.qIndex / this.quizData.length) * 100}%`;
+
+        const div = document.getElementById('opcoesContainer');
+        if(div) {
+            div.innerHTML = '';
+            q.ops.forEach((op, i) => {
+                const b = document.createElement('button');
+                b.className = 'option-btn'; b.innerText = op;
+                b.onclick = () => this.check(i, q.c);
+                div.appendChild(b);
+            });
+        }
+    },
+
+    check: function(i, c) {
+        const modal = document.getElementById('feedbackModal');
+        const img = document.getElementById('mascoteFeedback');
+        if(modal) modal.style.display = 'flex';
+        
+        if(i === c) {
+            this.qAcertos++;
+            safeSetText('feedbackTitle', 'Correto!');
+            safeSetText('feedbackMsg', 'Mandou bem.');
+            if(img) img.src = "img/mascote_feliz.png";
+        } else {
+            this.vidas--;
+            safeSetText('feedbackTitle', 'Ops!');
+            safeSetText('feedbackMsg', 'Resposta errada.');
+            if(img) img.src = "img/mascote_triste.png";
+        }
+    },
+
+    proximaPergunta: async function() {
+        document.getElementById('feedbackModal').style.display = 'none';
+
+        if(this.vidas <= 0) { alert("Game Over"); return this.loadHome(); }
+
+        this.qIndex++;
+        if(this.qIndex < this.quizData.length) {
+            this.renderQuestao();
+        } else {
+            const pct = this.qAcertos / this.quizData.length;
+            let est = 1;
+            if(pct === 1) est = 3; else if(pct > 0.7) est = 2;
+
+            alert(`Concluído! Estrelas: ${est}`);
+            
+            this.progressoLocal = this.progressoLocal.filter(p => p.aula_id !== this.aulaId);
+            this.progressoLocal.push({ usuario_id: this.user.id, aula_id: this.aulaId, status: 'concluida', estrelas: est });
+            
+            this.loadHome(); 
+            await DBService.salvarProgresso(this.user.id, this.aulaId, est);
+        }
+    },
+    
+    voltarParaHome: function() { this.loadHome(); }
+};
+
+window.onload = function() {
+    // Garante que a barra comece oculta
+    const nav = document.getElementById('bottomNav');
+    if(nav) { nav.style.display = 'none'; nav.classList.remove('visible'); }
+
+    if(localStorage.getItem('tema') === 'light') {
+        document.body.classList.add('light-theme');
+        const sw = document.getElementById('themeSwitch');
+        if(sw) sw.checked = false;
+    }
+    console.log("Sistema Pronto.");
+};
